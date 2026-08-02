@@ -16,3 +16,5 @@ backend/venv/
 # Operating System
 .DS_Store
 Thumbs.db
+# uv Virtual Environment
+.venv/

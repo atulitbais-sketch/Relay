@@ -1,0 +1,15 @@
+[project]
+name = "relay-agent"
+version = "0.1.0"
+description = "Agent brain for Project Relay"
+requires-python = ">=3.12,<3.13"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
