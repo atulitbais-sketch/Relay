@@ -62,3 +62,15 @@ class RetrievalContext(StrictModel):
     memories: list[MemorySearchResult] = Field(default_factory=list)
     pending_tasks: list[TaskRecord] = Field(default_factory=list)
     decisions: list[DecisionRecord] = Field(default_factory=list)
+
+
+class ModelOutput(StrictModel):
+    """Structured result returned by the reasoning model."""
+
+    answer: str = Field(min_length=1)
+    proposed_actions: list["ProposedAction"] = Field(default_factory=list)
+
+
+from relay_agent.contracts import ProposedAction
+
+ModelOutput.model_rebuild()

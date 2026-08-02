@@ -53,3 +53,20 @@ class MemoryRepository(Protocol):
     ) -> list[DecisionRecord]:
         """Return the project decision history."""
         ...
+
+
+@runtime_checkable
+class ReasoningModel(Protocol):
+    """Generates a grounded answer from retrieved enterprise context."""
+
+    def generate(
+        self,
+        *,
+        user_message: str,
+        grounding_context: str,
+    ) -> "ModelOutput":
+        """Return a structured model response."""
+        ...
+
+
+from relay_agent.domain import ModelOutput
