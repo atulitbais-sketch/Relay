@@ -54,3 +54,11 @@ class DecisionRecord(StrictModel):
     rationale: str
     status: DecisionStatus
     source_uri: str
+
+
+class RetrievalContext(StrictModel):
+    """Combined semantic and structured context for agent reasoning."""
+
+    memories: list[MemorySearchResult] = Field(default_factory=list)
+    pending_tasks: list[TaskRecord] = Field(default_factory=list)
+    decisions: list[DecisionRecord] = Field(default_factory=list)
