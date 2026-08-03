@@ -1,90 +1,140 @@
-import { Bell, Search, ChevronDown, Command, Activity } from "lucide-react";
+import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { Search, Bell, Command, Plus } from 'lucide-react'
 
-export default function Header() {
+const PAGE_TITLES = {
+  '/dashboard':  { title: 'Dashboard',         subtitle: 'Your workspace at a glance' },
+  '/chat':       { title: 'AI Chat',            subtitle: 'Powered by Relay Intelligence' },
+  '/documents':  { title: 'Documents',          subtitle: 'Indexed knowledge base' },
+  '/tasks':      { title: 'Tasks',              subtitle: 'Active work items' },
+  '/conflicts':  { title: 'Memory Conflicts',   subtitle: 'Review and resolve conflicts' },
+  '/settings':   { title: 'Settings',           subtitle: 'Workspace configuration' },
+}
+
+function Header() {
+  const location = useLocation()
+  const [searchFocused, setSearchFocused] = useState(false)
+  const page = PAGE_TITLES[location.pathname] || { title: 'Relay', subtitle: '' }
+
   return (
-    <header
-      className="sticky top-0 z-40 flex h-18 shrink-0 items-center justify-between px-8"
-      style={{
-        background: "rgba(9,16,31,0.75)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-      }}
-    >
-      {/* Search Input */}
-      <div className="relative w-full max-w-[380px]">
-        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
-        <input
-          placeholder="Search memories, tasks, documents..."
-          className="h-10 w-full rounded-xl pl-10 pr-12 text-xs text-white placeholder:text-slate-500 outline-none transition-all duration-300"
+    <header className="header" style={{ gap: 24, justifyContent: 'space-between' }}>
+      {/* Page Title */}
+      <div style={{ flexShrink: 0 }}>
+        <h1 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.2px', lineHeight: 1.2 }}>
+          {page.title}
+        </h1>
+        <p style={{ fontSize: 12, color: 'var(--text-tertiary)', marginTop: 1 }}>
+          {page.subtitle}
+        </p>
+      </div>
+
+      {/* Search */}
+      <div style={{ flex: 1, maxWidth: 440, position: 'relative' }}>
+        <Search
+          size={14}
           style={{
-            background: "rgba(255, 255, 255, 0.03)",
-            border: "1px solid rgba(255, 255, 255, 0.06)",
-          }}
-          onFocus={(e) => {
-            e.target.style.borderColor = "rgba(34, 211, 238, 0.35)";
-            e.target.style.background = "rgba(34, 211, 238, 0.03)";
-            e.target.style.boxShadow = "0 0 15px rgba(34, 211, 238, 0.08)";
-          }}
-          onBlur={(e) => {
-            e.target.style.borderColor = "rgba(255, 255, 255, 0.06)";
-            e.target.style.background = "rgba(255, 255, 255, 0.03)";
-            e.target.style.boxShadow = "none";
+            position: 'absolute',
+            left: 12,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            color: 'var(--text-tertiary)',
+            pointerEvents: 'none',
           }}
         />
-        <div
-          className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] text-slate-500"
-          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
-        >
-          <Command size={9} />
-          <span>K</span>
+        <input
+          className="input"
+          placeholder="Search documents, tasks, insights..."
+          style={{ paddingLeft: 36, paddingRight: 80 }}
+          onFocus={() => setSearchFocused(true)}
+          onBlur={() => setSearchFocused(false)}
+        />
+        <div style={{
+          position: 'absolute',
+          right: 10,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 4,
+          padding: '2px 6px',
+          background: 'rgba(255,255,255,0.05)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 6,
+          opacity: searchFocused ? 0 : 1,
+          transition: 'opacity var(--transition-fast)',
+          pointerEvents: 'none',
+        }}>
+          <Command size={11} style={{ color: 'var(--text-tertiary)' }} />
+          <span style={{ fontSize: 11, color: 'var(--text-tertiary)', fontWeight: 500 }}>K</span>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        {/* Connection status */}
-        <div className="hidden items-center gap-2 rounded-full px-3.5 py-1.5 text-[11px] font-semibold text-emerald-400 lg:flex"
-             style={{
-               background: "rgba(16, 185, 129, 0.06)",
-               border: "1px solid rgba(16, 185, 129, 0.15)",
-             }}>
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          </span>
-          Active
-        </div>
+      {/* Right Actions */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+        {/* New */}
+        <button className="btn btn-primary btn-sm" style={{ gap: 5 }}>
+          <Plus size={14} strokeWidth={2.5} />
+          New
+        </button>
 
         {/* Notifications */}
         <button
-          className="relative flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-200 hover:bg-white/[0.04]"
-          style={{ border: "1px solid rgba(255, 255, 255, 0.06)", background: "rgba(255, 255, 255, 0.02)" }}
+          style={{
+            position: 'relative',
+            width: 34,
+            height: 34,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 'var(--radius-md)',
+            background: 'transparent',
+            border: '1px solid var(--border-subtle)',
+            cursor: 'pointer',
+            color: 'var(--text-secondary)',
+            transition: 'all var(--transition-fast)',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+            e.currentTarget.style.color = 'var(--text-primary)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = 'transparent'
+            e.currentTarget.style.color = 'var(--text-secondary)'
+          }}
         >
-          <Bell size={16} className="text-slate-400" />
-          <span className="absolute right-2.5 top-2.5 h-1.5 w-1.5 rounded-full bg-cyan-400" style={{ boxShadow: "0 0 8px #22d3ee" }} />
+          <Bell size={15} />
+          <span style={{
+            position: 'absolute',
+            top: 6,
+            right: 6,
+            width: 6,
+            height: 6,
+            borderRadius: '50%',
+            background: 'var(--color-cyan)',
+            border: '1.5px solid var(--bg-primary)',
+          }} />
         </button>
 
-        {/* User Profile */}
-        <button
-          className="flex items-center gap-3 rounded-xl px-3 py-1.5 transition-all duration-200 hover:bg-white/[0.04]"
-          style={{ border: "1px solid rgba(255, 255, 255, 0.06)", background: "rgba(255, 255, 255, 0.02)" }}
-        >
-          <div
-            className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white"
-            style={{
-              background: "linear-gradient(135deg, #22d3ee, #3b82f6)",
-              boxShadow: "0 0 10px rgba(34, 211, 238, 0.25)",
-            }}
-          >
-            S
-          </div>
-          <div className="hidden text-left md:block">
-            <p className="text-xs font-bold text-white">Sandesh</p>
-            <p className="text-[10px] text-slate-500">Administrator</p>
-          </div>
-          <ChevronDown size={13} className="text-slate-600" />
-        </button>
+        {/* Avatar */}
+        <div style={{
+          width: 34,
+          height: 34,
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, var(--color-violet), var(--color-blue))',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: 12,
+          fontWeight: 700,
+          color: 'white',
+          cursor: 'pointer',
+          flexShrink: 0,
+        }}>
+          JD
+        </div>
       </div>
     </header>
-  );
+  )
 }
+
+export default Header

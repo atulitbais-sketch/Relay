@@ -1,28 +1,30 @@
-import MainLayout from "../components/layout/MainLayout";
-import DashboardHero from "../components/dashboard/DashboardHero";
-import DashboardStats from "../components/dashboard/DashboardStats";
-import AIInsights from "../components/dashboard/AIInsights";
-import ActivityTimeline from "../components/dashboard/ActivityTimeline";
-import ActivityGraph from "../components/dashboard/ActivityGraph";
-import MemoryCategories from "../components/dashboard/MemoryCategories";
+import DashboardHero from '../components/dashboard/DashboardHero'
+import DashboardStats from '../components/dashboard/DashboardStats'
+import AIInsights from '../components/dashboard/AIInsights'
+import ActivityTimeline from '../components/dashboard/ActivityTimeline'
+import ActivityGraph from '../components/dashboard/ActivityGraph'
+import MemoryCategories from '../components/dashboard/MemoryCategories'
 
-export default function Dashboard() {
+function Dashboard() {
   return (
-    <MainLayout>
-      <div className="space-y-6">
-        <DashboardHero />
-        <DashboardStats />
+    <div className="page-content section-gap" style={{ padding: '28px 32px' }}>
+      {/* Hero */}
+      <DashboardHero />
 
-        <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr] items-stretch">
-          <AIInsights />
-          <ActivityTimeline />
-        </div>
+      {/* Stats Row */}
+      <DashboardStats />
 
-        <div className="grid gap-6 lg:grid-cols-2 items-stretch">
-          <ActivityGraph />
-          <MemoryCategories />
-        </div>
+      {/* Activity Graph — full width */}
+      <ActivityGraph />
+
+      {/* Bottom Row — Insights | Timeline | Memory */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+        <AIInsights />
+        <ActivityTimeline />
+        <MemoryCategories />
       </div>
-    </MainLayout>
-  );
+    </div>
+  )
 }
+
+export default Dashboard

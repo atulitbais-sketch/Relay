@@ -1,55 +1,164 @@
-import { FileText, BrainCircuit, CheckSquare, AlertTriangle } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion'
+import { FileText, CheckSquare, AlertTriangle, Lightbulb, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 
-const stats = [
-  { title: "Documents", value: "148",  change: "+12 today",     icon: FileText,      accent: "#3b82f6", bg: "rgba(59,130,246,0.08)" },
-  { title: "Memories",  value: "2,451", change: "+54 today",    icon: BrainCircuit,  accent: "#8b5cf6", bg: "rgba(139,92,246,0.08)" },
-  { title: "Tasks",     value: "34",   change: "5 pending",     icon: CheckSquare,   accent: "#10b981", bg: "rgba(16,185,129,0.08)" },
-  { title: "Conflicts", value: "4",    change: "Needs review",  icon: AlertTriangle, accent: "#ef4444", bg: "rgba(239,68,68,0.08)" },
-];
+const STATS = [
+  {
+    id: 'documents',
+    label: 'Documents Indexed',
+    value: '2,841',
+    change: '+124',
+    changeLabel: 'this week',
+    trend: 'up',
+    icon: FileText,
+    color: 'var(--color-blue)',
+    colorDim: 'var(--color-blue-dim)',
+    colorBorder: 'var(--color-blue-border)',
+    description: 'Across all knowledge bases',
+  },
+  {
+    id: 'tasks',
+    label: 'Active Tasks',
+    value: '23',
+    change: '+5',
+    changeLabel: 'since yesterday',
+    trend: 'up',
+    icon: CheckSquare,
+    color: 'var(--color-violet)',
+    colorDim: 'var(--color-violet-dim)',
+    colorBorder: 'var(--color-violet-border)',
+    description: 'Across 4 projects',
+  },
+  {
+    id: 'conflicts',
+    label: 'Memory Conflicts',
+    value: '7',
+    change: '-3',
+    changeLabel: 'resolved today',
+    trend: 'down-good',
+    icon: AlertTriangle,
+    color: 'var(--color-amber)',
+    colorDim: 'var(--color-amber-dim)',
+    colorBorder: 'var(--color-amber-border)',
+    description: 'Requires review',
+  },
+  {
+    id: 'insights',
+    label: 'Insights Generated',
+    value: '384',
+    change: '+47',
+    changeLabel: 'this week',
+    trend: 'up',
+    icon: Lightbulb,
+    color: 'var(--color-green)',
+    colorDim: 'var(--color-green-dim)',
+    colorBorder: 'var(--color-green-border)',
+    description: 'AI-generated',
+  },
+]
 
-export default function DashboardStats() {
-  return (
-    <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-      {stats.map((item, index) => {
-        const Icon = item.icon;
-        return (
-          <motion.div
-            key={item.title}
-            whileHover={{ y: -3 }}
-            transition={{ duration: 0.2 }}
-            className="relative overflow-hidden rounded-2xl p-5"
-            style={{
-              background: "linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(9, 15, 28, 0.6) 100%)",
-              border: "1px solid rgba(255, 255, 255, 0.05)",
-              boxShadow: "0 8px 24px rgba(0, 0, 0, 0.3)",
-            }}
-          >
-            {/* Top Glow Accent bar */}
-            <div className="absolute top-0 left-0 w-full h-[2px]" style={{ background: item.accent, opacity: 0.6 }} />
-
-            <div className="flex items-center justify-between gap-4">
-              <div className="min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{item.title}</p>
-                <p className="mt-1.5 text-2xl font-extrabold tracking-tight text-white">{item.value}</p>
-                <p className="mt-1 text-[11px] font-bold" style={{ color: item.accent }}>
-                  {item.change}
-                </p>
-              </div>
-
-              <div
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition duration-300"
-                style={{
-                  background: item.bg,
-                  border: `1px solid ${item.accent}20`,
-                }}
-              >
-                <Icon size={18} style={{ color: item.accent }} />
-              </div>
-            </div>
-          </motion.div>
-        );
-      })}
-    </div>
-  );
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07 } },
 }
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
+}
+
+function TrendIcon({ trend }) {
+  if (trend === 'up') return <TrendingUp size={12} />
+  if (trend === 'down-good') return <TrendingDown size={12} />
+  return <Minus size={12} />
+}
+
+function StatCard({ stat }) {
+  const { label, value, change, changeLabel, trend, icon: Icon, color, colorDim, colorBorder, description } = stat
+  const isTrendGood = trend === 'up' || trend === 'down-good'
+  const trendColor = isTrendGood ? 'var(--color-green)' : 'var(--color-red)'
+
+  return (
+    <motion.div
+      variants={cardVariants}
+      whileHover={{ scale: 1.02, y: -2 }}
+      transition={{ duration: 0.15 }}
+      className="glass-card stat-card"
+      style={{ padding: '24px', cursor: 'default' }}
+    >
+      {/* Top Row */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+        <div style={{
+          width: 40,
+          height: 40,
+          borderRadius: 'var(--radius-md)',
+          background: colorDim,
+          border: `1px solid ${colorBorder}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <Icon size={18} style={{ color }} strokeWidth={1.8} />
+        </div>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 4,
+          padding: '3px 8px',
+          borderRadius: 999,
+          background: isTrendGood ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
+          border: `1px solid ${isTrendGood ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'}`,
+          color: trendColor,
+          fontSize: 11.5,
+          fontWeight: 600,
+        }}>
+          <TrendIcon trend={trend} />
+          {change}
+        </div>
+      </div>
+
+      {/* Value */}
+      <div style={{ fontSize: 30, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-1.5px', lineHeight: 1, marginBottom: 6 }}>
+        {value}
+      </div>
+
+      {/* Label */}
+      <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 4 }}>
+        {label}
+      </div>
+
+      {/* Description */}
+      <div style={{ fontSize: 11.5, color: 'var(--text-tertiary)' }}>
+        {description} · <span style={{ color: trendColor }}>{changeLabel}</span>
+      </div>
+
+      {/* Accent line */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 2,
+        borderRadius: '0 0 var(--radius-xl) var(--radius-xl)',
+        background: `linear-gradient(90deg, transparent, ${color}40, transparent)`,
+        pointerEvents: 'none',
+      }} />
+    </motion.div>
+  )
+}
+
+function DashboardStats() {
+  return (
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}
+    >
+      {STATS.map(stat => (
+        <StatCard key={stat.id} stat={stat} />
+      ))}
+    </motion.div>
+  )
+}
+
+export default DashboardStats

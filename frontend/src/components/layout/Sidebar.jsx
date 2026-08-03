@@ -1,3 +1,5 @@
+import { NavLink, useLocation } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import {
   LayoutDashboard,
   MessageSquare,
@@ -5,137 +7,193 @@ import {
   CheckSquare,
   AlertTriangle,
   Settings,
-  BrainCircuit,
-  Database,
-  ChevronDown,
   Zap,
-} from "lucide-react";
-import { NavLink } from "react-router-dom";
-import clsx from "clsx";
-import { motion } from "framer-motion";
+  ChevronRight,
+} from 'lucide-react'
 
-const menu = [
-  { title: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "#22d3ee" },
-  { title: "AI Chat",   icon: MessageSquare,   path: "/chat",       color: "#8b5cf6" },
-  { title: "Documents", icon: FileText,        path: "/upload",     color: "#3b82f6" },
-  { title: "Tasks",     icon: CheckSquare,     path: "/tasks",      color: "#10b981" },
-  { title: "Conflicts", icon: AlertTriangle,   path: "/conflicts",  color: "#ef4444" },
-  { title: "Settings",  icon: Settings,        path: "/settings",   color: "#f59e0b" },
-];
+const NAV_ITEMS = [
+  { to: '/dashboard',  icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/chat',       icon: MessageSquare,   label: 'AI Chat' },
+  { to: '/documents',  icon: FileText,         label: 'Documents' },
+  { to: '/tasks',      icon: CheckSquare,      label: 'Tasks' },
+  { to: '/conflicts',  icon: AlertTriangle,    label: 'Memory Conflicts' },
+]
 
-export default function Sidebar() {
+const BOTTOM_ITEMS = [
+  { to: '/settings', icon: Settings, label: 'Settings' },
+]
+
+function NavItem({ to, icon: Icon, label }) {
   return (
-    <aside
-      className="relative flex h-screen w-[250px] shrink-0 flex-col overflow-hidden"
-      style={{
-        background: "rgba(9, 16, 31, 0.85)",
-        backdropFilter: "blur(20px)",
-        borderRight: "1px solid rgba(255, 255, 255, 0.05)",
-      }}
-    >
-      {/* Decorative vertical border line */}
-      <div className="absolute top-0 right-0 h-full w-px bg-gradient-to-b from-cyan-500/10 via-indigo-500/10 to-transparent" />
+    <NavLink to={to} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+      {({ isActive }) => (
+        <>
+          <Icon size={16} strokeWidth={isActive ? 2.2 : 1.8} />
+          <span>{label}</span>
+        </>
+      )}
+    </NavLink>
+  )
+}
 
-      {/* Logo Area */}
-      <div className="px-6 py-6" style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
-        <div className="flex items-center gap-3">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl"
-               style={{
-                 background: "linear-gradient(135deg, #22d3ee, #3b82f6, #6366f1)",
-                 boxShadow: "0 0 15px rgba(34, 211, 238, 0.35)",
-               }}>
-            <BrainCircuit size={20} className="text-white" />
-            <div className="absolute -inset-0.5 rounded-xl bg-cyan-400/20 blur-md animate-pulse-glow pointer-events-none" />
+function Sidebar() {
+  return (
+    <aside className="sidebar">
+      {/* Logo */}
+      <div style={{ padding: '20px 20px 12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 32,
+            height: 32,
+            borderRadius: 9,
+            background: 'linear-gradient(135deg, var(--color-cyan) 0%, var(--color-blue) 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 12px rgba(34, 211, 238, 0.3)',
+            flexShrink: 0,
+          }}>
+            <Zap size={16} strokeWidth={2.5} color="#050811" />
           </div>
           <div>
-            <h1 className="text-base font-extrabold tracking-tight text-white flex items-center gap-1.5">
+            <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.2px' }}>
               Relay
-            </h1>
-            <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Enterprise AI</span>
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--text-tertiary)', fontWeight: 500, letterSpacing: '0.02em' }}>
+              Enterprise AI
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-4 py-6">
-        <div className="space-y-1.5">
-          {menu.map((item) => {
-            const Icon = item.icon;
-            return (
-              <NavLink key={item.path} to={item.path}>
-                {({ isActive }) => (
-                  <div
-                    className={clsx(
-                      "group flex items-center gap-3.5 rounded-xl px-3.5 py-3 text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer",
-                      isActive
-                        ? "text-white"
-                        : "text-slate-500 hover:bg-white/[0.03] hover:text-slate-300"
-                    )}
-                    style={isActive ? {
-                      background: `linear-gradient(135deg, ${item.color}15, ${item.color}05)`,
-                      border: `1px solid ${item.color}25`,
-                      boxShadow: `0 0 15px ${item.color}06`,
-                    } : {
-                      border: "1px solid transparent",
-                    }}
-                  >
-                    <Icon size={16} style={{ color: isActive ? item.color : undefined }} className={!isActive ? "text-slate-500 transition-colors group-hover:text-slate-300" : ""} />
-                    <span>{item.title}</span>
-                  </div>
-                )}
-              </NavLink>
-            );
-          })}
-        </div>
+      {/* Divider */}
+      <div className="divider" style={{ margin: '8px 20px 12px' }} />
+
+      {/* Workspace Pill */}
+      <div style={{ padding: '0 12px 4px' }}>
+        <button style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '8px 10px',
+          background: 'rgba(255,255,255,0.04)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 'var(--radius-md)',
+          cursor: 'pointer',
+          color: 'var(--text-secondary)',
+          transition: 'background var(--transition-fast)',
+        }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.07)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{
+              width: 22,
+              height: 22,
+              borderRadius: 6,
+              background: 'linear-gradient(135deg, #8B5CF6, #3B82F6)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 10,
+              fontWeight: 700,
+              color: 'white',
+            }}>A</div>
+            <span style={{ fontSize: 13, fontWeight: 500 }}>Acme Corp</span>
+          </div>
+          <ChevronRight size={13} />
+        </button>
+      </div>
+
+      {/* Nav Label */}
+      <div style={{ padding: '16px 20px 6px' }}>
+        <span className="text-label">Navigation</span>
+      </div>
+
+      {/* Main Nav */}
+      <nav style={{ padding: '0 12px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {NAV_ITEMS.map(item => (
+          <NavItem key={item.to} {...item} />
+        ))}
       </nav>
 
-      {/* Memory Capacity */}
-      <div className="px-4 pb-4">
-        <div className="relay-card p-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: "rgba(34,211,238,0.08)" }}>
-              <Database size={14} className="text-cyan-400" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[11px] font-bold text-white uppercase tracking-wider">Memory Size</p>
-              <p className="text-[10px] text-slate-500">2,451 / 5,000</p>
-            </div>
-            <span className="text-[11px] font-bold text-cyan-400">74%</span>
+      {/* Spacer */}
+      <div style={{ flex: 1 }} />
+
+      {/* Storage indicator */}
+      <div style={{ padding: '0 20px 16px' }}>
+        <div style={{
+          background: 'rgba(255,255,255,0.04)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 'var(--radius-md)',
+          padding: '12px 14px',
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+            <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-secondary)' }}>Memory Used</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-cyan)' }}>68%</span>
           </div>
-          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+          <div style={{ height: 4, borderRadius: 999, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: "74%" }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-              className="h-full rounded-full"
-              style={{
-                background: "linear-gradient(90deg, #22d3ee, #6366f1)",
-                boxShadow: "0 0 8px rgba(34, 211, 238, 0.4)",
-              }}
+              animate={{ width: '68%' }}
+              transition={{ duration: 1.2, ease: 'easeOut', delay: 0.5 }}
+              style={{ height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, var(--color-cyan), var(--color-blue))' }}
             />
+          </div>
+          <div style={{ marginTop: 6, fontSize: 11, color: 'var(--text-tertiary)' }}>
+            34.2 GB of 50 GB
           </div>
         </div>
       </div>
 
-      {/* Profile Footer */}
-      <div className="px-4 pb-5" style={{ borderTop: "1px solid rgba(255, 255, 255, 0.04)" }}>
-        <div className="mt-4 flex cursor-pointer items-center gap-3 rounded-xl p-2 transition-all duration-200 hover:bg-white/[0.03]">
-          <div
-            className="flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold text-white"
-            style={{
-              background: "linear-gradient(135deg, #8b5cf6, #3b82f6)",
-              boxShadow: "0 0 10px rgba(139, 92, 246, 0.25)",
-            }}
-          >
-            S
+      {/* Bottom Nav */}
+      <div className="divider" style={{ margin: '0 20px 12px' }} />
+      <nav style={{ padding: '0 12px 8px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {BOTTOM_ITEMS.map(item => (
+          <NavItem key={item.to} {...item} />
+        ))}
+      </nav>
+
+      {/* User Row */}
+      <div style={{ padding: '8px 12px 16px' }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          padding: '8px 10px',
+          borderRadius: 'var(--radius-md)',
+          cursor: 'pointer',
+          transition: 'background var(--transition-fast)',
+        }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+        >
+          <div style={{
+            width: 30,
+            height: 30,
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, var(--color-violet), var(--color-blue))',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 12,
+            fontWeight: 700,
+            color: 'white',
+            flexShrink: 0,
+          }}>JD</div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.3 }}>
+              Jane Doe
+            </div>
+            <div style={{ fontSize: 11.5, color: 'var(--text-tertiary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              jane@acme.com
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold text-white">Sandesh</p>
-            <p className="text-[10px] text-slate-500">Administrator</p>
-          </div>
-          <ChevronDown size={14} className="text-slate-600" />
         </div>
       </div>
     </aside>
-  );
+  )
 }
+
+export default Sidebar

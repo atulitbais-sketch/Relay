@@ -1,64 +1,110 @@
-const categories = [
-  { label: "Security",     value: 28, color: "#3b82f6" },
-  { label: "Compliance",   value: 22, color: "#8b5cf6" },
-  { label: "Architecture", value: 18, color: "#22d3ee" },
-  { label: "Procurement",  value: 15, color: "#10b981" },
-  { label: "HR Policy",    value: 10, color: "#f59e0b" },
-  { label: "Other",        value: 7,  color: "#64748b" },
-];
+import { motion } from 'framer-motion'
+import { Database, ChevronRight } from 'lucide-react'
 
-export default function MemoryCategories() {
-  const total = categories.reduce((s, c) => s + c.value, 0);
-  let offset = 0;
-  const segments = categories.map((c) => {
-    const pct = (c.value / total) * 100;
-    const seg = { ...c, pct, offset };
-    offset += pct;
-    return seg;
-  });
+const CATEGORIES = [
+  { id: 'product',     label: 'Product',       count: 847,  pct: 30, color: '#22D3EE', badge: 'badge-cyan' },
+  { id: 'engineering', label: 'Engineering',   count: 1124, pct: 40, color: '#3B82F6', badge: 'badge-blue' },
+  { id: 'sales',       label: 'Sales',         count: 412,  pct: 15, color: '#8B5CF6', badge: 'badge-violet' },
+  { id: 'hr',          label: 'HR & People',   count: 231,  pct: 8,  color: '#10B981', badge: 'badge-green' },
+  { id: 'finance',     label: 'Finance',       count: 187,  pct: 7,  color: '#F59E0B', badge: 'badge-amber' },
+]
 
-  const gradientStops = segments
-    .map((s) => `${s.color} ${s.offset}% ${s.offset + s.pct}%`)
-    .join(", ");
-
+function MemoryCategories() {
   return (
-    <div className="relay-card p-6">
-      <div className="mb-6">
-        <h2 className="text-base font-bold text-white tracking-tight">Top Memory Categories</h2>
-        <p className="mt-1 text-xs text-slate-500">Distribution across knowledge base</p>
-      </div>
-
-      <div className="flex flex-col sm:flex-row items-center gap-8 justify-around">
-        <div className="relative shrink-0 flex items-center justify-center">
-          <div
-            className="h-36 w-36 rounded-full"
-            style={{
-              background: `conic-gradient(${gradientStops})`,
-              boxShadow: "0 0 35px rgba(34, 211, 238, 0.12)",
-            }}
-          />
-          <div
-            className="absolute inset-0 m-auto flex h-24 w-24 flex-col items-center justify-center rounded-full"
-            style={{ background: "rgba(14,23,38,1)", border: "1px solid rgba(255,255,255,0.04)" }}
-          >
-            <span className="text-xl font-extrabold text-white">2,451</span>
-            <span className="text-[9px] text-slate-500 uppercase tracking-widest font-bold mt-0.5">Total</span>
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: 'easeOut', delay: 0.25 }}
+      className="glass-card"
+      style={{ padding: '24px 28px' }}
+    >
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+          <div style={{
+            width: 32,
+            height: 32,
+            borderRadius: 'var(--radius-md)',
+            background: 'rgba(255,255,255,0.06)',
+            border: '1px solid var(--border-default)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Database size={15} style={{ color: 'var(--text-secondary)' }} />
+          </div>
+          <div>
+            <h2 style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.2 }}>
+              Memory Categories
+            </h2>
+            <p style={{ fontSize: 11.5, color: 'var(--text-tertiary)' }}>2,801 total documents indexed</p>
           </div>
         </div>
-
-        <div className="flex-1 w-full space-y-2.5">
-          {categories.map((c) => (
-            <div key={c.label} className="flex items-center justify-between gap-4 rounded-lg p-1.5 px-3 transition hover:bg-white/[0.01]"
-                 style={{ border: "1px solid rgba(255,255,255,0.01)" }}>
-              <div className="flex items-center gap-2.5">
-                <span className="h-2 w-2 rounded-full" style={{ background: c.color, boxShadow: `0 0 8px ${c.color}` }} />
-                <span className="text-xs font-semibold text-slate-400">{c.label}</span>
-              </div>
-              <span className="text-xs font-bold text-white">{c.value}%</span>
-            </div>
-          ))}
-        </div>
+        <button className="btn btn-ghost btn-sm" style={{ fontSize: 12.5 }}>
+          Manage <ChevronRight size={12} />
+        </button>
       </div>
-    </div>
-  );
+
+      {/* Stacked bar */}
+      <div style={{
+        display: 'flex',
+        height: 8,
+        borderRadius: 999,
+        overflow: 'hidden',
+        gap: 2,
+        marginBottom: 20,
+      }}>
+        {CATEGORIES.map(({ id, pct, color }, index) => (
+          <motion.div
+            key={id}
+            initial={{ width: 0 }}
+            animate={{ width: `${pct}%` }}
+            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 + index * 0.08 }}
+            style={{ height: '100%', background: color, borderRadius: 2 }}
+          />
+        ))}
+      </div>
+
+      {/* Category rows */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {CATEGORIES.map(({ id, label, count, pct, color, badge }, index) => (
+          <motion.div
+            key={id}
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, ease: 'easeOut', delay: 0.4 + index * 0.06 }}
+            style={{ display: 'flex', flexDirection: 'column', gap: 5 }}
+          >
+            {/* Row label + count */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ width: 8, height: 8, borderRadius: 2, background: color, flexShrink: 0 }} />
+                <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>{label}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>
+                  {count.toLocaleString()} docs
+                </span>
+                <span style={{ fontSize: 12, fontWeight: 600, color, minWidth: 30, textAlign: 'right' }}>
+                  {pct}%
+                </span>
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div style={{ height: 3, borderRadius: 999, background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${pct}%` }}
+                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.45 + index * 0.08 }}
+                style={{ height: '100%', background: color, borderRadius: 999 }}
+              />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  )
 }
+
+export default MemoryCategories
