@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════
+   RELAY — THEME DEFINITIONS AND PREMIUM UTILITIES
+   ═══════════════════════════════════════════════ */
+
+:root {
+  font-family: 'Inter', system-ui, sans-serif;
+  color-scheme: dark;
+
+  --relay-bg:        #050811;      /* Deep Midnight space */
+  --relay-surface:   #090F1C;   /* Sidebar & header backdrop */
+  --relay-card:      rgba(15, 23, 42, 0.45); /* Translucent glass card */
+  --relay-border:    rgba(255, 255, 255, 0.055);
+  --relay-border-hover: rgba(255, 255, 255, 0.12);
+
+  --cyan:    #06b6d4;
+  --blue:    #3b82f6;
+  --indigo:  #6366f1;
+  --violet:  #8b5cf6;
+  --emerald: #10b981;
+  --amber:   #f59e0b;
+  --red:     #ef4444;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  background: var(--relay-bg);
+}
+
+body {
+  color: #f1f5f9;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Premium Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.3);
+}
+
+/* ─── Premium Card Styling (Individualized) ─── */
+.glass-panel {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(9, 15, 28, 0.8) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--relay-border);
+  border-radius: 24px;
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel-hover:hover {
+  transform: translateY(-2px);
+  border-color: rgba(6, 182, 212, 0.2);
+  box-shadow: 
+    0 20px 40px -15px rgba(0, 0, 0, 0.5),
+    0 0 25px -5px rgba(6, 182, 212, 0.08);
+}
+
+/* ─── Premium Buttons ─── */
+.btn-primary {
+  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.35);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ─── Grid Patterns ─── */
+.bg-grid-overlay {
+  background-image: 
+    linear-gradient(rgba(6, 182, 212, 0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.012) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
