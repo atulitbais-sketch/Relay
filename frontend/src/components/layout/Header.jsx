@@ -8,7 +8,6 @@ const PAGE_TITLES = {
   '/documents': { title: 'Documents', subtitle: 'Indexed knowledge base' },
   '/tasks': { title: 'Tasks', subtitle: 'Active work items' },
   '/conflicts': { title: 'Memory Conflicts', subtitle: 'Review and resolve conflicts' },
-  '/settings': { title: 'Settings', subtitle: 'Workspace configuration' },
 }
 
 function Header() {

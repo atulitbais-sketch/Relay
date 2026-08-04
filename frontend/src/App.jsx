@@ -5,7 +5,6 @@ import AIChat from './pages/AIChat'
 import Documents from './pages/Documents'
 import Tasks from './pages/Tasks'
 import MemoryConflicts from './pages/MemoryConflicts'
-import Settings from './pages/Settings'
 
 function App() {
   return (
@@ -18,7 +17,6 @@ function App() {
           <Route path="documents" element={<Documents />} />
           <Route path="tasks" element={<Tasks />} />
           <Route path="conflicts" element={<MemoryConflicts />} />
-          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </BrowserRouter>

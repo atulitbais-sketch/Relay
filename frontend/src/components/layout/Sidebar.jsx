@@ -6,7 +6,6 @@ import {
   FileText,
   CheckSquare,
   AlertTriangle,
-  Settings,
   Zap,
   ChevronRight,
 } from 'lucide-react'
@@ -19,9 +18,7 @@ const NAV_ITEMS = [
   { to: '/conflicts',  icon: AlertTriangle,    label: 'Memory Conflicts' },
 ]
 
-const BOTTOM_ITEMS = [
-  { to: '/settings', icon: Settings, label: 'Settings' },
-]
+
 
 function NavItem({ to, icon: Icon, label }) {
   return (
@@ -147,13 +144,6 @@ function Sidebar() {
         </div>
       </div>
 
-      {/* Bottom Nav */}
-      <div className="divider" style={{ margin: '0 20px 12px' }} />
-      <nav style={{ padding: '0 12px 8px', display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {BOTTOM_ITEMS.map(item => (
-          <NavItem key={item.to} {...item} />
-        ))}
-      </nav>
 
       {/* User Row */}
       <div style={{ padding: '8px 12px 16px' }}>
