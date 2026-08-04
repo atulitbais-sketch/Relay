@@ -62,7 +62,7 @@ function DashboardHero() {
             </div>
           </div>
           <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.8px', lineHeight: 1.2, marginBottom: 8 }}>
-            {greeting}, Jane 👋
+            {greeting}, Sandesh 
           </h1>
           <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 24 }}>
             {dateStr} &nbsp;·&nbsp; {timeStr}
