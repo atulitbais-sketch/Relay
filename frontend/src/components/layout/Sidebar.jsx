@@ -99,8 +99,8 @@ function Sidebar() {
               fontSize: 10,
               fontWeight: 700,
               color: 'white',
-            }}>A</div>
-            <span style={{ fontSize: 13, fontWeight: 500 }}>Acme Corp</span>
+            }}>N</div>
+            <span style={{ fontSize: 13, fontWeight: 500 }}>Nexora Technologies</span>
           </div>
           <ChevronRight size={13} />
         </button>
@@ -181,13 +181,13 @@ function Sidebar() {
             fontWeight: 700,
             color: 'white',
             flexShrink: 0,
-          }}>JD</div>
+          }}>SM</div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.3 }}>
-              Jane Doe
+              Sandesh Mutadak
             </div>
             <div style={{ fontSize: 11.5, color: 'var(--text-tertiary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              jane@acme.com
+              sandesh@Nexoratech.com
             </div>
           </div>
         </div>
